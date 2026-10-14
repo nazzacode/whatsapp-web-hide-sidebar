@@ -13,7 +13,7 @@ if [[ "${1:-}" == "--install" ]]; then
   [[ -n "$def" && -d "$base/$def" ]] || { echo "Zen default profile not found in $base" >&2; exit 1; }
   prof="$base/$def/extensions"
   mkdir -p "$prof"
-  if pgrep -x zen >/dev/null || pgrep -f 'app.zen_browser.zen' >/dev/null; then echo "close Zen first" >&2; exit 1; fi
+  if pgrep -x zen >/dev/null; then echo "close Zen first" >&2; exit 1; fi
   cp dist/whatsapp-web-hide-sidebar.xpi "$prof/whatsapp-web-hide-sidebar@nazzacode.xpi.tmp" && mv "$prof/whatsapp-web-hide-sidebar@nazzacode.xpi.tmp" "$prof/whatsapp-web-hide-sidebar@nazzacode.xpi"
   echo "installed → $prof"
 fi
