@@ -1,19 +1,19 @@
 {
   "manifest_version": 2,
-  "name": "WA Focus",
-  "version": "0.1.0",
-  "description": "Hide the WhatsApp Web sidebar. Alt+Shift+S toggles; left edge peeks.",
+  "name": "WhatsApp Web: Hide Sidebar",
+  "version": "0.2.0",
+  "description": "A button in the chat header hides the WhatsApp Web chat list and nav rail. Alt+Shift+S also toggles.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "wa-focus@nazzacode",
+      "id": "whatsapp-web-hide-sidebar@nazzacode",
       "data_collection_permissions": { "required": ["none"] }
     }
   },
   "content_scripts": [
     {
       "matches": ["https://web.whatsapp.com/*"],
-      "js": ["wa.js"],
-      "css": ["wa.css"],
+      "js": ["sidebar.js"],
+      "css": ["sidebar.css"],
       "run_at": "document_idle"
     }
   ]

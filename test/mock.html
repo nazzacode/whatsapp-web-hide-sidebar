@@ -1,0 +1,57 @@
+<!doctype html><meta charset="utf-8">
+<!-- WhatsApp-shaped mock layouts; ?l=flex|outer-rail|grid|drawer|nochat -->
+<link rel="stylesheet" href="../sidebar.css">
+<style>
+  html, body { margin: 0; height: 100%; }
+  #app, .wrap { height: 100%; }
+  .row { display: flex; height: 100%; }
+  .rail { width: 64px; flex: none; background: #ddd; }
+  .side { flex: 0 0 30%; max-width: 30%; }
+  .mainc { flex: 0 0 70%; max-width: 70%; }
+  .drawer .mainc { flex: 1 1 auto; max-width: none; }
+  .dr { flex: 0 0 30%; }
+  .grid { display: grid; grid-template-columns: 30% 70%; height: 100%; }
+  #main header { height: 59px; display: flex; align-items: center; }
+  #main header svg { color: rgb(1, 2, 3); }
+</style>
+<div id="app"></div>
+<script>
+const l = new URLSearchParams(location.search).get("l");
+const hdr = `<header><svg data-icon="x" width="10" height="10"></svg><span id="name">Alice</span></header><div>msgs</div>`;
+const side = `<div class="side"><div><div id="side">chats</div></div></div>`;
+const main = l === "nochat" ? `<div class="mainc">welcome</div>` : `<div class="mainc"><div id="main">${hdr}</div></div>`;
+document.getElementById("app").innerHTML = {
+  flex: `<div class="wrap"><div class="row"><header class="rail"></header>${side}${main}</div></div>`,
+  "outer-rail": `<div class="row"><header class="rail"></header><div class="row" style="flex:1">${side}${main}</div></div>`,
+  grid: `<div class="row"><header class="rail"></header><div class="grid" style="flex:1">${side}${main}</div></div>`,
+  drawer: `<div class="row drawer"><header class="rail"></header>${side}${main}<div class="dr" id="drawer">info</div></div>`,
+  nochat: `<div class="row"><header class="rail"></header>${side}${main}</div>`,
+}[l];
+</script>
+<script src="../sidebar.js"></script>
+<script>
+const frames = (n) => new Promise((r) => { const f = () => (n-- ? requestAnimationFrame(f) : r()); f(); });
+const w = (sel) => { const e = document.querySelector(sel); return e ? Math.round(e.getBoundingClientRect().width) : null; };
+const snap = () => {
+  const b = document.getElementById("whs-btn"), h = document.querySelector("#main header");
+  const br = b.getBoundingClientRect(), hr = h?.getBoundingClientRect();
+  const nm = document.getElementById("name")?.getBoundingClientRect();
+  return {
+    side: w("#side"), rail: w(".rail"), main: w("#main"), drawer: w("#drawer"),
+    btnShown: getComputedStyle(b).display !== "none",
+    btnInHeader: hr ? br.left >= hr.left && br.right <= hr.left + 52 && br.top >= hr.top && br.bottom <= hr.bottom : null,
+    btnClearsName: nm ? br.right <= nm.left : null,
+    btnColor: b.style.color, label: b.title, pressed: b.getAttribute("aria-pressed"),
+  };
+};
+window.__result = (async () => {
+  await frames(3);
+  const r = { vw: innerWidth, start: snap() };
+  document.getElementById("whs-btn").click(); await frames(3); r.hidden = snap();
+  if (l === "nochat") return r;
+  // React-like re-render of chat pane while hidden
+  const m = document.getElementById("main"); m.replaceWith(m.cloneNode(true)); await frames(3); r.rerender = snap();
+  dispatchEvent(new KeyboardEvent("keydown", { code: "KeyS", altKey: true, shiftKey: true })); await frames(3); r.keyShown = snap();
+  return r;
+})();
+</script>

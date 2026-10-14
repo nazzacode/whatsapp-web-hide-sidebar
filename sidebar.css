@@ -1,0 +1,22 @@
+/* WhatsApp classes are hashed → sidebar.js tags stable nodes with data-whs-* */
+html.whs-hidden [data-whs-hide] { display: none !important; }
+html.whs-hidden [data-whs-main] { flex: 1 1 auto !important; max-width: none !important; width: auto !important; }
+/* grid parent that didn't reflow → flex fallback */
+html.whs-hidden [data-whs-flex] { display: flex !important; }
+html.whs-hidden [data-whs-flex] > * { flex: 0 0 auto; }
+html.whs-hidden [data-whs-flex] > [data-whs-main] { flex: 1 1 auto !important; min-width: 0; }
+
+/* room for the button in the chat header */
+#main header { padding-left: 52px !important; }
+
+#whs-btn {
+  position: fixed; z-index: 2147483000;
+  width: 40px; height: 40px; margin: 0; padding: 8px;
+  display: none; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: transparent;
+  color: #8696a0; cursor: pointer;
+}
+#whs-btn.whs-on { display: flex; }
+#whs-btn:hover { background: rgba(134, 150, 160, .18); }
+#whs-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+#whs-btn svg { width: 24px; height: 24px; pointer-events: none; }

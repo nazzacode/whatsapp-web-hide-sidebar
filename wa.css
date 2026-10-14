@@ -1,8 +1,0 @@
-/* WhatsApp classes are hashed → wa.js tags stable nodes with data-waf-* */
-html.waf-hide:not(.waf-peek) [data-waf-hide] { display: none !important; }
-html.waf-hide:not(.waf-peek) [data-waf-main] {
-  flex: 1 1 100% !important;
-  max-width: none !important;
-  width: 100% !important;
-  grid-column: 1 / -1 !important;
-}
