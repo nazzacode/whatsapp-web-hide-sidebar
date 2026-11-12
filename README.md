@@ -1,21 +1,32 @@
 # Hide Sidebar for WhatsApp Web
 
-Hide the WhatsApp Web sidebar (chat list + nav rail) so the open chat fills the window. Firefox, Zen and Chrome extension.
+One button hides the chat list on WhatsApp Web, so the chat you're in fills the window.
 
 | Sidebar shown | Sidebar hidden |
 | --- | --- |
 | ![shown](store/screenshot-1-shown.png) | ![hidden](store/screenshot-2-hidden.png) |
 
-- **Button** at the left of the chat header toggles it (remembered across reloads)
-- `Alt+Shift+S` toggles too
-- no chat open → sidebar always shown, button hidden
-- right-hand drawers (contact info, search) are left alone
-- no permissions beyond `web.whatsapp.com`, no data collected, no network requests
+## Why
+
+- **Narrow or tiled window**: the chat list takes half the width. Now the conversation gets all of it.
+- **Screen sharing**: nobody reads your chat list while you show one chat.
+- **Focus**: one conversation, nothing else.
 
 ## Install
 
-- **Firefox / Zen**: [addons.mozilla.org](https://addons.mozilla.org/firefox/addon/hide-sidebar-for-whatsapp-web/)
-- **Chrome / Chromium / Vivaldi / Edge**: [Chrome Web Store](https://chromewebstore.google.com/detail/cgcbklnncjeopadmnnkpjhpcloinagba) (live once Google's review passes). Until then: download the `-chrome.zip` from [Releases](https://github.com/nazzacode/whatsapp-web-hide-sidebar/releases), unzip, then `chrome://extensions` → Developer mode → Load unpacked
+| Browser | |
+| --- | --- |
+| Firefox, Zen | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/hide-sidebar-for-whatsapp-web/) (in review) |
+| Chrome, Chromium, Vivaldi, Edge, Brave | [Chrome Web Store](https://chromewebstore.google.com/detail/cgcbklnncjeopadmnnkpjhpcloinagba) (in review) |
+
+Until the store pages are live, Chromium browsers can install by hand: download the `-chrome.zip` from [Releases](https://github.com/nazzacode/whatsapp-web-hide-sidebar/releases), unzip, then `chrome://extensions` → Developer mode → Load unpacked.
+
+## Use
+
+- Click the **button** at the left of the chat header, or press `Alt+Shift+S`.
+- Your choice is remembered across reloads.
+- With no chat open the sidebar always shows, so you never get a blank screen.
+- Panels on the right (contact info, search) are left alone.
 
 ## Privacy
 
