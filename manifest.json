@@ -1,19 +1,38 @@
 {
   "manifest_version": 2,
-  "name": "WhatsApp Web: Hide Sidebar",
-  "version": "0.2.0",
-  "description": "A button in the chat header hides the WhatsApp Web chat list and nav rail. Alt+Shift+S also toggles.",
+  "name": "Hide Sidebar for WhatsApp Web",
+  "version": "1.0.0",
+  "description": "Adds a button to the chat header that hides the chat list and nav rail, so the open chat fills the window. Alt+Shift+S toggles too.",
+  "homepage_url": "https://github.com/nazzacode/whatsapp-web-hide-sidebar",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "whatsapp-web-hide-sidebar@nazzacode",
-      "data_collection_permissions": { "required": ["none"] }
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      },
+      "strict_min_version": "115.0"
     }
   },
   "content_scripts": [
     {
-      "matches": ["https://web.whatsapp.com/*"],
-      "js": ["sidebar.js"],
-      "css": ["sidebar.css"],
+      "matches": [
+        "https://web.whatsapp.com/*"
+      ],
+      "js": [
+        "sidebar.js"
+      ],
+      "css": [
+        "sidebar.css"
+      ],
       "run_at": "document_idle"
     }
   ]

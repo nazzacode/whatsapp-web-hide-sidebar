@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "en-US": "Adds a button to the chat header that hides the chat list and nav rail, so the open chat fills the window. Alt+Shift+S toggles too."
+  },
+  "description": {
+    "en-US": "WhatsApp Web always shows the chat list, even when you only want to read one conversation. This add-on adds a small button to the left of the chat header. Click it and the chat list and the nav rail disappear, so the open chat fills the whole window. Click again to bring them back.\n\n• Button in the chat header, or Alt+Shift+S\n• Remembers your choice across reloads\n• With no chat open the sidebar always shows, so you never get a blank screen\n• Contact info and search panels on the right are left alone\n\nUseful in narrow or tiled windows, on small screens, and when you share your screen and would rather not show your chat list.\n\nNo data is collected and no network requests are made. It only runs on web.whatsapp.com. Open source (MIT): https://github.com/nazzacode/whatsapp-web-hide-sidebar\n\nNot affiliated with WhatsApp or Meta."
+  },
+  "categories": { "firefox": ["social-communication"] },
+  "homepage": { "en-US": "https://github.com/nazzacode/whatsapp-web-hide-sidebar" },
+  "support_url": { "en-US": "https://github.com/nazzacode/whatsapp-web-hide-sidebar/issues" },
+  "version": { "license": "MIT" }
+}

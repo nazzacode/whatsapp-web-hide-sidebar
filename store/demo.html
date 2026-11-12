@@ -1,0 +1,46 @@
+<!doctype html><meta charset="utf-8">
+<!-- store screenshots: generic chat layout with made-up people; ?hidden=1 = sidebar hidden. Render: store/shots.sh -->
+<link rel="stylesheet" href="../sidebar.css">
+<style>
+  html, body { margin: 0; height: 100%; font: 15px/1.35 system-ui, sans-serif; color: #111b21; background: #fff; }
+  #app, .row { height: 100%; } .row { display: flex; }
+  .rail { width: 64px; flex: none; background: #f0f2f5; border-right: 1px solid #e3e6e8; display: flex; flex-direction: column; align-items: center; gap: 22px; padding-top: 18px; box-sizing: border-box; }
+  .rail i { width: 24px; height: 24px; border-radius: 7px; background: #c5ccd1; } .rail i:first-child { background: #00a884; }
+  .side { flex: 0 0 400px; border-right: 1px solid #e3e6e8; display: flex; flex-direction: column; }
+  .side h1 { font-size: 22px; margin: 0; padding: 18px 20px 10px; }
+  .search { margin: 4px 16px 10px; padding: 9px 16px; border-radius: 20px; background: #f0f2f5; color: #667781; }
+  .chat { display: flex; gap: 14px; padding: 11px 16px; align-items: center; } .chat.on { background: #f0f2f5; }
+  .av { width: 48px; height: 48px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-weight: 600; }
+  .chat b { display: block; font-weight: 500; } .chat span { color: #667781; font-size: 14px; } .chat time { margin-left: auto; color: #667781; font-size: 12px; align-self: flex-start; }
+  .mainc { flex: 1 1 auto; min-width: 0; } #main { height: 100%; display: flex; flex-direction: column; background: #efeae2; }
+  #main header { height: 64px; flex: none; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: #fff; border-bottom: 1px solid #e3e6e8; }
+  #main header svg { color: #54656f; margin-left: auto; } #main header .av { width: 40px; height: 40px; }
+  .msgs { flex: 1; padding: 28px 8%; display: flex; flex-direction: column; gap: 8px; }
+  .m { max-width: 60%; padding: 8px 12px; border-radius: 10px; background: #fff; box-shadow: 0 1px 1px #0002; } .m.me { align-self: flex-end; background: #d9fdd3; }
+  .box { margin: 0 16px 16px; padding: 14px 20px; border-radius: 26px; background: #fff; color: #667781; }
+</style>
+<div id="app"><div class="row">
+  <header class="rail"><i></i><i></i><i></i><i></i></header>
+  <div class="side"><div id="side">
+    <h1>Chats</h1><div class="search">Search</div>
+    <div class="chat on"><div class="av" style="background:#7b61ff">M</div><div><b>Maya Okafor</b><span>See you at seven then</span></div><time>14:02</time></div>
+    <div class="chat"><div class="av" style="background:#e8743b">F</div><div><b>Five-a-side</b><span>Tom: who has the bibs?</span></div><time>13:40</time></div>
+    <div class="chat"><div class="av" style="background:#1e9bd7">J</div><div><b>Jonas Weber</b><span>Thanks, got it</span></div><time>12:15</time></div>
+    <div class="chat"><div class="av" style="background:#d6457a">F</div><div><b>Flat 3</b><span>Priya: bins go out tonight</span></div><time>11:58</time></div>
+    <div class="chat"><div class="av" style="background:#3aa76d">L</div><div><b>Lena Park</b><span>Photo</span></div><time>Yesterday</time></div>
+    <div class="chat"><div class="av" style="background:#8a8f98">S</div><div><b>Sam Rivera</b><span>Call you later</span></div><time>Yesterday</time></div>
+  </div></div>
+  <div class="mainc"><div id="main">
+    <header><div class="av" style="background:#7b61ff">M</div><b>Maya Okafor</b><svg data-icon="menu" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></header>
+    <div class="msgs">
+      <div class="m">Are we still on for dinner tonight?</div>
+      <div class="m me">Yes! I booked the place by the canal</div>
+      <div class="m">Perfect. What time?</div>
+      <div class="m me">Table is at seven, I'll be there a bit before</div>
+      <div class="m">See you at seven then</div>
+    </div>
+    <div class="box">Type a message</div>
+  </div></div>
+</div></div>
+<script>try { localStorage.setItem("whs-hidden", new URLSearchParams(location.search).has("hidden") ? "1" : "0"); } catch {}</script>
+<script src="../sidebar.js"></script>
