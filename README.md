@@ -15,7 +15,7 @@ Hide the WhatsApp Web sidebar (chat list + nav rail) so the open chat fills the 
 ## Install
 
 - **Firefox / Zen**: [addons.mozilla.org](https://addons.mozilla.org/firefox/addon/hide-sidebar-for-whatsapp-web/)
-- **Chrome / Chromium / Vivaldi / Edge**: download the `-chrome.zip` from [Releases](https://github.com/nazzacode/whatsapp-web-hide-sidebar/releases), unzip, then `chrome://extensions` → Developer mode → Load unpacked
+- **Chrome / Chromium / Vivaldi / Edge**: [Chrome Web Store](https://chromewebstore.google.com/detail/cgcbklnncjeopadmnnkpjhpcloinagba) (live once Google's review passes). Until then: download the `-chrome.zip` from [Releases](https://github.com/nazzacode/whatsapp-web-hide-sidebar/releases), unzip, then `chrome://extensions` → Developer mode → Load unpacked
 
 ## Privacy
 
