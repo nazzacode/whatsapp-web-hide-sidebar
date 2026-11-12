@@ -30,4 +30,4 @@ Not affiliated with WhatsApp or Meta.
 - **Host permission justification** (`https://web.whatsapp.com/*`): the content script runs only on WhatsApp Web, where it adds the toggle button and hides the sidebar with CSS. It does not read messages or contacts.
 - **Remote code**: No.
 - **Data usage**: collects nothing. Tick none of the data types; certify all three disclosures.
-- **Privacy policy URL**: not required (no user data). If the form insists: https://github.com/nazzacode/whatsapp-web-hide-sidebar#readme
+- **Privacy policy URL**: not required (no user data). If the form insists: https://github.com/nazzacode/whatsapp-web-hide-sidebar/blob/main/DEVELOP.md

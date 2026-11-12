@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Hide Sidebar for WhatsApp Web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Adds a button to the chat header that hides the chat list and nav rail, so the open chat fills the window. Alt+Shift+S toggles too.",
   "homepage_url": "https://github.com/nazzacode/whatsapp-web-hide-sidebar",
   "icons": {

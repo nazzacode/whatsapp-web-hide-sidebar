@@ -1,6 +1,8 @@
 /* WhatsApp classes are hashed → sidebar.js tags stable nodes with data-whs-* */
 html.whs-hidden [data-whs-hide] { display: none !important; }
 html.whs-hidden [data-whs-main] { flex: 1 1 auto !important; max-width: none !important; width: auto !important; }
+/* WhatsApp pins the row at min-width ~750px → chat cut off in a narrow window; lift it while hidden */
+html.whs-hidden [data-whs-fork] { min-width: 0 !important; }
 /* grid parent that didn't reflow → flex fallback */
 html.whs-hidden [data-whs-flex] { display: flex !important; }
 html.whs-hidden [data-whs-flex] > * { flex: 0 0 auto; }

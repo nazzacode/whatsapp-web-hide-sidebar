@@ -29,7 +29,10 @@ const findLayout = () => {
   };
   const rails = mainUp.slice(mainUp.indexOf(mainCol))
     .flatMap((n) => [...(n.parentElement?.children ?? [])].filter((s) => s !== n && isRail(s)));
-  return { main, fork, mainCol, hide: [sideCol, ...rails] };
+  // empty placeholder columns keep their borders → stray vertical lines; hide while they hold nothing
+  const empties = [...fork.children].filter((c) => c !== mainCol && c !== sideCol
+    && !c.textContent.trim() && !c.querySelector("img, svg, canvas, video, input, [contenteditable]"));
+  return { main, fork, mainCol, hide: [sideCol, ...rails, ...empties] };
 };
 
 const sync = (attr, nodes) => {
@@ -92,6 +95,7 @@ const update = () => {
   const layout = findLayout();
   sync("data-whs-hide", layout?.hide ?? []);
   sync("data-whs-main", layout ? [layout.mainCol] : []);
+  sync("data-whs-fork", layout ? [layout.fork] : []);
   if (!layout) sync("data-whs-flex", []);
   root.classList.toggle("whs-hidden", hidden && !!layout);
   reflowCheck(layout);
