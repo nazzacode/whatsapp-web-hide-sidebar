@@ -8,6 +8,7 @@ WhatsApp's classes are hashed, so `sidebar.js` finds `#side`/`#main` by id, tags
 
 - Build `./build.sh` → `dist/whatsapp-web-hide-sidebar-firefox.xpi` (MV2) + `-chrome.zip` (MV3, manifest derived)
 - Install into Zen `./build.sh --install` (Zen closed, unsigned)
+- Robustness `test/robust.sh` (RTL, min-width, narrow, drawer slot filled while hidden, viewer overlay, close chat); `FIREFOX=1` also runs headless Firefox
 - Test `test/run.sh` → headless Chromium over mock layouts (flex, outer rail, grid, drawer, no chat)
 - Store assets `store/` (listing text, AMO metadata, `shots.sh` → screenshots from `demo.html`)
 - Sign + submit to AMO: `web-ext sign --source-dir dist/firefox --channel listed --amo-metadata store/amo.json`

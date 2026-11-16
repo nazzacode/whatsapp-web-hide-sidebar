@@ -12,6 +12,8 @@ const ancestors = (el) => {
 };
 const childOf = (parent, chain) => chain.find((n) => n.parentElement === parent);
 
+const isEmpty = (c) => !c.textContent.trim() && !c.querySelector("img, svg, canvas, video, input, [contenteditable]");
+const railSeen = new WeakSet(); // rails measured once: display:none later reads 0px
 // layout: fork = lowest common ancestor of #side/#main; hide only #side's column (+ rail), never drawers/modals
 const findLayout = () => {
   const side = document.getElementById("side");
@@ -23,15 +25,16 @@ const findLayout = () => {
   const sideCol = childOf(fork, sideUp), mainCol = childOf(fork, mainUp);
   // rail: narrow, tall sibling of #main's column or its ancestors (already hidden = 0px → keep its tag)
   const isRail = (s) => {
-    if (s.hasAttribute("data-whs-hide")) return true;
+    if (railSeen.has(s)) return true;
     const r = s.getBoundingClientRect();
-    return r.width > 0 && r.width < 100 && r.height > innerHeight * 0.8;
+    const ok = r.width > 0 && r.width < 100 && s.scrollWidth < 100 && r.height > innerHeight * 0.8 && !isEmpty(s);
+    if (ok) railSeen.add(s);
+    return ok;
   };
   const rails = mainUp.slice(mainUp.indexOf(mainCol))
     .flatMap((n) => [...(n.parentElement?.children ?? [])].filter((s) => s !== n && isRail(s)));
   // empty placeholder columns keep their borders → stray vertical lines; hide while they hold nothing
-  const empties = [...fork.children].filter((c) => c !== mainCol && c !== sideCol
-    && !c.textContent.trim() && !c.querySelector("img, svg, canvas, video, input, [contenteditable]"));
+  const empties = [...fork.children].filter((c) => c !== mainCol && c !== sideCol && isEmpty(c));
   return { main, fork, mainCol, hide: [sideCol, ...rails, ...empties] };
 };
 
@@ -73,6 +76,8 @@ const place = (layout) => {
   if (!header) return btn.classList.remove("whs-on");
   const r = header.getBoundingClientRect();
   if (!r.width) return btn.classList.remove("whs-on");
+  const top = document.elementsFromPoint(r.left + 28, r.top + r.height / 2).find((n) => n !== btn);
+  if (top && !layout.main.contains(top)) return btn.classList.remove("whs-on"); // viewer/modal covers the header
   btn.style.left = `${r.left + 8}px`;
   btn.style.top = `${r.top + (r.height - 40) / 2}px`;
   const ref = header.querySelector("[data-icon], span[aria-hidden] svg, svg");
@@ -112,11 +117,14 @@ const schedule = () => {
 const obs = new MutationObserver(schedule);
 const watch = () => obs.observe(document.body, { childList: true, subtree: true });
 
-const toggle = () => { hidden = !hidden; save(hidden); update(); };
+const toggle = () => {
+  if (!document.getElementById("main")) return; // no chat open: nothing to hide, don't flip the saved state
+  hidden = !hidden; save(hidden); update();
+};
 
 btn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); toggle(); });
 addEventListener("keydown", (e) => {
-  if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && e.code === "KeyS") {
+  if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.repeat && e.code === "KeyS") {
     e.preventDefault(); e.stopPropagation(); toggle();
   }
 }, true);
