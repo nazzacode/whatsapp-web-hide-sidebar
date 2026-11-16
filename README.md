@@ -10,6 +10,8 @@ Facebook, in its infinite wisdom, gives WhatsApp Web no way to collapse the chat
 
 Click the button in the chat header, or press `Alt+Shift+S`.
 
+The WhatsApp Mac app has the same problem, and an extension can't fix an app. Use WhatsApp Web in your browser instead and you get the button.
+
 ## Install
 
 - **Firefox, Zen**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/hide-sidebar-for-whatsapp-web/)
