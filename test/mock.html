@@ -21,11 +21,11 @@ const hdr = `<header><svg data-icon="x" width="10" height="10"></svg><span id="n
 const side = `<div class="side"><div><div id="side">chats</div></div></div>`;
 const main = l === "nochat" ? `<div class="mainc">welcome</div>` : `<div class="mainc"><div id="main">${hdr}</div></div>`;
 document.getElementById("app").innerHTML = {
-  flex: `<div class="wrap"><div class="row"><header class="rail"></header>${side}${main}</div></div>`,
-  "outer-rail": `<div class="row"><header class="rail"></header><div class="row" style="flex:1">${side}${main}</div></div>`,
-  grid: `<div class="row"><header class="rail"></header><div class="grid" style="flex:1">${side}${main}</div></div>`,
-  drawer: `<div class="row drawer"><header class="rail"></header>${side}${main}<div class="dr" id="drawer">info</div></div>`,
-  nochat: `<div class="row"><header class="rail"></header>${side}${main}</div>`,
+  flex: `<div class="wrap"><div class="row"><header class="rail"><svg width="24" height="24"></svg></header>${side}${main}</div></div>`,
+  "outer-rail": `<div class="row"><header class="rail"><svg width="24" height="24"></svg></header><div class="row" style="flex:1">${side}${main}</div></div>`,
+  grid: `<div class="row"><header class="rail"><svg width="24" height="24"></svg></header><div class="grid" style="flex:1">${side}${main}</div></div>`,
+  drawer: `<div class="row drawer"><header class="rail"><svg width="24" height="24"></svg></header>${side}${main}<div class="dr" id="drawer">info</div></div>`,
+  nochat: `<div class="row"><header class="rail"><svg width="24" height="24"></svg></header>${side}${main}</div>`,
 }[l];
 </script>
 <script src="../sidebar.js"></script>

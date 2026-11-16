@@ -21,11 +21,22 @@ let id = 0; const pending = new Map();
 ws.onmessage = (m) => { const d = JSON.parse(m.data); pending.get(d.id)?.(d); pending.delete(d.id); };
 const send = (method, params = {}) => new Promise((r) => { pending.set(++id, r); ws.send(JSON.stringify({ id, method, params })); });
 
-for (const l of layouts) {
-  await send("Page.navigate", { url: `file://${here}/mock.html?l=${l}` });
+// PAGE=robust.html → pass/fail checks; layout "name@517" sets viewport width
+const page = process.env.PAGE ?? "mock.html";
+let failed = 0;
+for (const spec of layouts) {
+  const [l, width] = spec.split("@");
+  await send("Emulation.setDeviceMetricsOverride", { width: +(width ?? 1400), height: 900, deviceScaleFactor: 1, mobile: false });
+  await send("Page.navigate", { url: `file://${here}/${page}?l=${l}` });
   await sleep(500);
   const res = await send("Runtime.evaluate", { expression: "window.__result", awaitPromise: true, returnByValue: true });
-  console.log(l, JSON.stringify(res.result?.result?.value ?? res.result?.exceptionDetails ?? res));
+  const val = res.result?.result?.value;
+  if (val?.checks) {
+    for (const [k, ok] of Object.entries(val.checks)) { console.log(ok ? "PASS" : "FAIL", spec, k); failed += !ok; }
+    console.log("    ", spec, JSON.stringify(val.data));
+    continue;
+  }
+  console.log(l, JSON.stringify(val ?? res.result?.exceptionDetails ?? res));
   if (process.env.SHOTS) { // shown + hidden screenshots of the header corner
     const { writeFileSync, mkdirSync } = await import("node:fs");
     mkdirSync(process.env.SHOTS, { recursive: true });
@@ -38,3 +49,4 @@ for (const l of layouts) {
   }
 }
 ws.close(); proc.kill();
+process.exitCode = failed ? 1 : 0;
