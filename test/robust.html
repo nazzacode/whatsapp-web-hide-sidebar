@@ -1,0 +1,131 @@
+<!doctype html><meta charset="utf-8">
+<!-- robustness layouts; ?l=rtl|minwidth|narrow|placeholder|placeholder-shown|anim|overlay|closechat
+     each → window.__result = { checks: {name: bool}, data } ; a false check = bug or gap in sidebar.js/css -->
+<link rel="stylesheet" href="../sidebar.css">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  #app { height: 100%; }
+  .row { display: flex; height: 100%; }
+  .mw { min-width: 750px; }
+  .rail { width: 64px; flex: none; background: #ddd; }
+  .side { flex: 0 0 30%; max-width: 30%; }
+  .mainc { flex: 1 1 auto; min-width: 0; }
+  .ph { border-left: 1px solid red; }              /* empty drawer slot: only its border shows */
+  .ph.open { flex: 0 0 30%; }
+  #main header { height: 59px; display: flex; align-items: center; padding: 0 16px; gap: 8px; }
+  #main header svg { color: rgb(1, 2, 3); }
+  #avatar { width: 40px; height: 40px; flex: none; background: #ccc; }
+  #name { flex: 1; }
+  #viewer { position: fixed; inset: 0; z-index: 1000; background: #111; }
+</style>
+<div id="app"></div>
+<script>
+const l = new URLSearchParams(location.search).get("l");
+try { localStorage.removeItem("whs-hidden"); } catch {} // before sidebar.js reads it: every scenario starts shown
+if (l === "rtl") document.documentElement.dir = "rtl";
+const hdr = `<header><div id="avatar"></div><span id="name">Alice</span><svg id="act" data-icon="menu" width="24" height="24"></svg></header><div>msgs</div>`;
+const side = `<div class="side"><div><div id="side">chats</div></div></div>`;
+const main = `<div class="mainc"><div id="main">${hdr}</div></div>`;
+const rail = `<header class="rail"><svg width="24" height="24"></svg></header>`;
+const ph = `<div class="ph" id="ph"></div>`;
+document.getElementById("app").innerHTML = {
+  rtl: `<div class="row">${rail}${side}${main}</div>`,
+  minwidth: `<div class="row mw">${rail}${side}${main}</div>`,
+  narrow: `<div class="row">${rail}${side}${main}</div>`,
+  placeholder: `<div class="row">${rail}${side}${main}${ph}</div>`,
+  "placeholder-shown": `<div class="row">${rail}${side}${main}${ph}</div>`,
+  anim: `<div class="row">${rail}${side}${main}</div>`,
+  overlay: `<div class="row">${rail}${side}${main}</div>`,
+  closechat: `<div class="row">${rail}${side}${main}</div>`,
+}[l];
+</script>
+<script src="../sidebar.js"></script>
+<script>
+const frames = (n) => new Promise((r) => { const f = () => (n-- ? requestAnimationFrame(f) : r()); f(); });
+const $ = (s) => document.querySelector(s);
+const rect = (s) => $(s)?.getBoundingClientRect();
+const w = (s) => { const r = rect(s); return r ? Math.round(r.width) : null; };
+const overlap = (a, b) => a.left < b.right - .5 && b.left < a.right - .5 && a.top < b.bottom - .5 && b.top < a.bottom - .5;
+const theBtn = () => document.getElementById("whs-btn");
+const btnVisible = () => getComputedStyle(theBtn()).display !== "none";
+const hiddenOn = () => document.documentElement.classList.contains("whs-hidden");
+const click = async () => { theBtn().click(); await frames(3); };
+const openDrawer = async () => { const p = $("#ph"); p.classList.add("open"); p.innerHTML = "<div>Contact info</div>"; await frames(3); };
+const headerOk = () => { // button inside header, touching none of its children
+  const b = rect("#whs-btn"), h = rect("#main header");
+  return { inHeader: b.left >= h.left && b.right <= h.right && b.top >= h.top && b.bottom <= h.bottom,
+    clear: ["#avatar", "#name", "#act"].every((s) => !overlap(b, rect(s))) };
+};
+const scenarios = {
+  async rtl() {
+    const c = {}, a = headerOk();
+    c.shown_btnInHeader = a.inHeader; c.shown_btnClearOfHeaderContent = a.clear;
+    await click(); const b = headerOk();
+    c.hidden_sideGone = w("#side") === 0 && w(".rail") === 0;
+    c.hidden_mainFills = w("#main") === innerWidth;
+    c.hidden_btnInHeader = b.inHeader; c.hidden_btnClearOfHeaderContent = b.clear;
+    return { checks: c, data: { btnLeft: Math.round(rect("#whs-btn").left), vw: innerWidth, avatarLeft: Math.round(rect("#avatar").left) } };
+  },
+  async minwidth() {
+    const c = {};
+    c.shown_rowOverflows = w(".row") > innerWidth; // precondition: mock reproduces the cut-off
+    await click(); const a = headerOk();
+    c.hidden_mainFitsViewport = w("#main") === innerWidth && rect("#main").right <= innerWidth;
+    c.hidden_btnInHeader = a.inHeader; c.hidden_btnClearOfHeaderContent = a.clear;
+    await click();
+    c.reshown_minWidthRestored = w(".row") === 750;
+    return { checks: c, data: { vw: innerWidth, main: w("#main") } };
+  },
+  async narrow() {
+    const c = {}; await click(); const a = headerOk();
+    c.hidden_mainFills = w("#main") === innerWidth; c.hidden_btnInHeader = a.inHeader; c.hidden_btnClearOfHeaderContent = a.clear;
+    return { checks: c, data: { vw: innerWidth } };
+  },
+  async placeholder() { // hide first, then a drawer opens into the empty slot
+    const c = {}; await click();
+    c.hidden_emptySlotHidden = getComputedStyle($("#ph")).display === "none";
+    await openDrawer();
+    c.hidden_drawerAppearsWhenFilled = w("#ph") > 0;
+    $("#ph").innerHTML = ""; $("#ph").classList.remove("open"); await frames(3);
+    c.hidden_slotHiddenAgainWhenEmptied = getComputedStyle($("#ph")).display === "none";
+    return { checks: c, data: { ph: w("#ph"), tagged: $("#ph").hasAttribute("data-whs-hide") } };
+  },
+  async "placeholder-shown"() { // drawer opened while sidebar shown, then user hides sidebar
+    const c = {}; await openDrawer();
+    c.shown_drawerVisible = w("#ph") > 0;
+    c.shown_filledSlotUntagged = !$("#ph").hasAttribute("data-whs-hide");
+    await click();
+    c.hidden_drawerStillVisible = w("#ph") > 0;
+    return { checks: c, data: { ph: w("#ph") } };
+  },
+  async anim() { // drawer with content inserted narrow (width animation start) while hidden → must not stick as "rail"
+    const c = {}; await click();
+    const d = document.createElement("div"); d.id = "ph"; d.innerHTML = `<div style="width:400px">Contact info</div>`;
+    d.style.cssText = "flex:none;width:40px;overflow:hidden"; $(".row").append(d); await frames(3);
+    d.style.width = "400px"; await frames(3);
+    c.hidden_animatedDrawerVisible = w("#ph") === 400;
+    return { checks: c, data: { ph: w("#ph"), tagged: d.hasAttribute("data-whs-hide") } };
+  },
+  async overlay() { // full-window media viewer over the chat; #main stays mounted
+    const c = {}; const v = document.createElement("div"); v.id = "viewer"; v.innerHTML = "<img alt=''>";
+    document.getElementById("app").append(v); await frames(3);
+    const b = rect("#whs-btn");
+    const top = btnVisible() ? document.elementFromPoint(b.left + 20, b.top + 20) : null;
+    c.viewer_btnNotOnTop = top !== theBtn();
+    return { checks: c, data: { btnVisible: btnVisible(), top: top?.id ?? top?.tagName ?? null } };
+  },
+  async closechat() { // chat closed while hidden → sidebar must come back; reopen → hidden again
+    const c = {}; await click();
+    const col = $(".mainc"), m = $("#main"); m.remove(); await frames(3);
+    c.noChat_sidebarBack = w("#side") > 0 && w(".rail") === 64 && !hiddenOn();
+    c.noChat_btnGone = !btnVisible();
+    col.append(m); await frames(3);
+    c.reopened_hiddenAgain = w("#side") === 0 && w(".rail") === 0 && hiddenOn() && btnVisible();
+    return { checks: c, data: {} };
+  },
+};
+window.__result = (async () => {
+  await frames(3);
+  try { return await scenarios[l](); } catch (e) { return { checks: { noException: false }, data: String(e) }; }
+})();
+</script>
