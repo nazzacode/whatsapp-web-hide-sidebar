@@ -11,7 +11,9 @@ Copy for the Chrome Web Store form (AMO reads `amo.json`).
 
 ## Description
 
-WhatsApp Web always shows the chat list, even when you only want to read one conversation. This add-on adds a small button to the left of the chat header. Click it and the chat list and the nav rail disappear, so the open chat fills the whole window. Click again to bring them back.
+Facebook, in its infinite wisdom, gives WhatsApp Web no way to collapse the chat list. This extension adds one button that does.
+
+It matters most in split screen, where WhatsApp gets a narrow window and the chat list takes all of it. Click the button in the chat header and the chat list and nav rail disappear, so the open chat fills the window. Click again to bring them back.
 
 • Button in the chat header, or Alt+Shift+S
 • Remembers your choice across reloads
